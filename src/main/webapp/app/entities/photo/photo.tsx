@@ -13,6 +13,7 @@ import { IPhoto } from 'app/shared/model/photo.model';
 // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+import Gallery from 'react-photo-gallery';
 
 export interface IPhotoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -53,6 +54,11 @@ export class Photo extends React.Component<IPhotoProps, IPhotoState> {
 
   render() {
     const { photoList, match } = this.props;
+    const photoSet = photoList.map(photo => ({
+      src: `data:${photo.imageContentType};base64,${photo.image}`,
+      width: photo.height > photo.width ? 3 : photo.height === photo.width ? 1 : 4,
+      height: photo.height > photo.width ? 4 : photo.height === photo.width ? 1 : 3
+    }));
     return (
       <div>
         <h2 id="photo-heading">
@@ -62,6 +68,7 @@ export class Photo extends React.Component<IPhotoProps, IPhotoState> {
             <Translate contentKey="galleryApp.photo.home.createLabel">Create new Photo</Translate>
           </Link>
         </h2>
+        <Gallery photos={photoSet} />
         <div className="table-responsive">
           <InfiniteScroll
             pageStart={this.state.activePage}
